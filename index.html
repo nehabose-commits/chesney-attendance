@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+a<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -179,7 +179,7 @@ const SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
 // ════════════════════════════════════════════════════════
 // Admin email & PIN — only this person gets admin access
 // ════════════════════════════════════════════════════════
-const ADMIN_EMAIL = 'chesney@chesneyindia.com';
+const ADMIN_EMAIL = 'nehabose2304@gmail.com';
 const ADMIN_PIN   = '123456'; // ← Change this to your personal admin PIN
 
 // ════════════════════════════════════════════════════════
@@ -220,14 +220,22 @@ const clear = ()  => { try{localStorage.removeItem('cx_v2');}catch{} };
 
 async function api(payload) {
   try {
-    const r = await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
-    return await r.json();
-  } catch{ return {ok:false,error:'Network error. Check your connection.'}; }
+    const r = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      redirect: 'follow',
+      body: JSON.stringify(payload)
+    });
+    const text = await r.text();
+    return JSON.parse(text);
+  } catch(e) { return {ok:false, error:'Network error. Check your connection.'}; }
 }
 async function fetchMonth(email) {
   try {
-    const r = await fetch(SCRIPT_URL+'?email='+encodeURIComponent(email)+'&month='+monthKey());
-    return await r.json();
+    const r = await fetch(SCRIPT_URL+'?email='+encodeURIComponent(email)+'&month='+monthKey(), {
+      redirect: 'follow'
+    });
+    const text = await r.text();
+    return JSON.parse(text);
   } catch{ return []; }
 }
 
