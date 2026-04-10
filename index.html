@@ -220,10 +220,12 @@ const clear = ()  => { try{localStorage.removeItem('cx_v2');}catch{} };
 
 async function api(payload) {
   try {
-    const r = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      redirect: 'follow',
-      body: JSON.stringify(payload)
+    // Use GET with params to avoid CORS preflight issues
+    const params = new URLSearchParams();
+    Object.keys(payload).forEach(k => params.append(k, payload[k]));
+    const r = await fetch(SCRIPT_URL + '?' + params.toString(), {
+      method: 'GET',
+      redirect: 'follow'
     });
     const text = await r.text();
     return JSON.parse(text);
